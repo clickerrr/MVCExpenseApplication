@@ -1,0 +1,103 @@
+﻿@model MVCBeginner.Models.Expense
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@if (ViewData["userId"] != null)
+{
+    <h1>Welcome @ViewData["userId"]!</h1>
+}
+
+<div class="container-fluid">
+
+    <div class="row justify-content-end">
+        <div class="col-lg-1">
+            <a class="btn btn-primary" href="/logout">Logout</a>
+        </div>
+    </div>
+
+</div>
+
+<div class="container">
+
+    <div class="text-center row justify-content-center">
+        <div class="border border-dark rounded p-1 pt-5 pb-5 col-lg-4">
+
+            <div class="mb-2 row justify-content-center">
+                <div class="col-lg-10">
+                    <h4>Add Expense</h4>
+                </div>
+            </div>
+
+            <div class="row p-2 justify-content-center">
+
+                <div class="col-lg-8">
+                    @using (var form = Html.BeginForm())
+                    {
+                        <div class="p-2 row justify-content-center">
+                            <div class="p-3 rounded bg-primary col-lg-10">
+                                <label for="ExpenseDate">Expense Date: </label>
+                                <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" min="2018-01-01" max="@DateTime.UtcNow.ToString("yyyy-MM-dd")" id="ExpenseDate" name="ExpenseDate" />
+                                @Html.ValidationMessageFor(m => m.ExpenseDate)
+                            </div>
+                        </div>
+
+                        <div class="p-2 row justify-content-center">
+                            <div class="p-3 rounded bg-primary col-lg-10">
+                                <label for="Amount">Expense Amount:</label>
+                                <input size="5" maxlength="8" type="number" id="Amount" name="Amount" step=".01" />
+                                @Html.ValidationMessageFor(m => m.Amount)
+                            </div>
+                        </div>
+
+                        <input type="submit" value="Submit" />
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @if(ViewBag.ExpenseList != null)
+    {
+        @if (ViewBag.ExpenseList.Count != 0)
+        {
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col" colspan="9">Expenses</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int i = 0;
+                            }
+                            @foreach (Expense expense in ViewBag.ExpenseList)
+                            {
+                                <tr>
+                                    <td colspan="8" scope="row">@expense.ToString()</td>
+                                    <td>
+                                        <div class="row justify-content-end">
+                                            <div class="col-lg-2 me-3">
+                                                <form asp-route="RemoveExpense" asp-route-index="@i" method="post">
+                                                    <input type="image" width="25" src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-close-512.png" />
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                i++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+    }
+    
+
+
+</div>

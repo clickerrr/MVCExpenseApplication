@@ -1,0 +1,77 @@
+﻿@model MVCBeginner.Models.UserSignup
+@{
+    ViewData["Title"] = "Sign Up";
+}
+
+<div class="container">
+
+    <div class="mt-5 row text-center justify-content-center">
+
+        <div class="border border-rounded col-lg-4">
+        
+        
+            <div class="row text-center justify-content-center">
+                <div class="col-lg-8">
+                    <h1>Sign Up</h1>
+                </div>
+            </div>
+
+            <div class="row p-2 justify-content-center">
+
+                <div class="col-lg-8">
+                    @using (var form = Html.BeginForm())
+                    {
+                        <div class="p-2 row justify-content-center">
+                            <div class="p-3 rounded bg-primary col-lg-10">
+                                <label for="Username">Username: </label>
+                                <input placeholder="Username" type="text" id="Username" name="Username" />
+                                @Html.ValidationMessageFor(m => m.Username)
+                            </div>
+                        </div>
+
+                        <div class="p-2 row justify-content-center">
+                            <div class="p-3 rounded bg-primary col-lg-10">
+                                <label for="Password">Password:</label>
+                                <input placeholder="Password" type="password" id="Password" name="Password" />
+                                @Html.ValidationMessageFor(m => m.Password)
+                            </div>
+                        </div>
+
+                        <div class="p-2 row justify-content-center">
+                            <div class="p-3 rounded bg-primary col-lg-10">
+                                <label for="PasswordConfirm">Confirm Password:</label>
+                                <input placeholder="Confirm Password" type="password" id="PasswordConfirm" name="PasswordConfirm" />
+                                @Html.ValidationMessageFor(m => m.PasswordConfirm)
+                            </div>
+                        </div>
+
+                        @if (ViewData["errorMessage"] != null)
+                        {
+                            <div class="p-2 row justify-content-center">
+                                <div class="text-danger col-lg-10">
+                                    <p>@ViewData["errorMessage"]</p>
+                                </div>
+                            </div>
+                        }
+
+
+                        <input type="submit" value="Submit" />
+                    }
+                </div>
+
+                <div class="col-lg-8">
+                    <a asp-controller="Login" asp-action="Login">Login Here</a>
+                </div>
+
+
+            </div>
+        
+        
+        </div>
+
+    </div>
+
+
+    
+</div>
+
