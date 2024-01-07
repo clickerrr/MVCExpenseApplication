@@ -64,7 +64,7 @@ namespace MVCBeginner.Controllers
                 HttpContext.Session.SetString("userid", foundUser.Id.ToString());
             }
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Dashboard", "Home");
 
 
         }
@@ -130,7 +130,7 @@ namespace MVCBeginner.Controllers
             }
 
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Dashboard", "Home");
         }
 
         [Route("/logout")]

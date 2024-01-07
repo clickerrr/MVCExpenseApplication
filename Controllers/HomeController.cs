@@ -21,8 +21,8 @@ namespace MVCBeginner.Controllers
 
         [HttpGet]
         [Route("/")]
-        [Route("/index")]
-        public IActionResult Index()
+        [Route("/dashboard")]
+        public IActionResult Dashboard()
         {
 
             string? userId = HttpContext.Session.GetString("userid");
@@ -50,8 +50,8 @@ namespace MVCBeginner.Controllers
 
         [HttpPost]
         [Route("/")]
-        [Route("/index")]
-        public IActionResult Index(Expense userExpense)
+        [Route("/dashboard")]
+        public IActionResult Dashboard(Expense userExpense)
         {
             ViewBag.ExpenseList = expenseList;
             if (ModelState.IsValid)
@@ -83,12 +83,12 @@ namespace MVCBeginner.Controllers
             }
 
             if (index < 0 || index >= expenseList.Count)
-                return RedirectToAction("Index");
+                return RedirectToAction("Dashboard");
 
             Expense expenseToRemove = expenseList.ElementAt(index);
             if(expenseToRemove == null)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Dashboard");
             }
 
             using(var db = ConnectionManager.GetConnection())
@@ -105,7 +105,7 @@ namespace MVCBeginner.Controllers
 
 
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Dashboard");
         }
 
         [Route("/privacy")]

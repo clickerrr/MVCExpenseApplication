@@ -1,13 +1,10 @@
 ﻿@model MVCBeginner.Models.Expense
 @using Microsoft.AspNetCore.Http
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
+    Layout = "_HomeLayout";
 }
 
-@if (ViewData["userId"] != null)
-{
-    <h1>Welcome @ViewData["userId"]!</h1>
-}
 
 <div class="container-fluid">
 
