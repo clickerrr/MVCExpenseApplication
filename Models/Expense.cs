@@ -5,6 +5,8 @@ namespace MVCBeginner.Models
 {
     public class Expense
     {
+        [DataType(DataType.Text)]
+        public string? Title { get; set; } = "";
         public int Id { get; set; }
         [Required(ErrorMessage = "You must enter a valid date!")]
         [Display(Name = "Expense Date:")]
@@ -46,7 +48,7 @@ namespace MVCBeginner.Models
 
         public override String ToString()
         {
-            return String.Format("[{0}] : ${1}", this.ExpenseDate is null ? "null" : this.ExpenseDate?.Date.ToShortDateString(), this.Amount);
+            return String.Format("[{0}] {1}: ${2}", this.ExpenseDate is null ? "null" : this.ExpenseDate?.Date.ToShortDateString(), this.Title, this.Amount);
         }
     }
 }

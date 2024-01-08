@@ -63,7 +63,7 @@ namespace MVCBeginner.Controllers
 
                 using ( var db = ConnectionManager.GetConnection())
                 {
-                    db.Execute("INSERT INTO dbo.Expenses (ExpenseDate, Amount, UserId) VALUES (@expenseDate, @amount, @userId)", new { expenseDate = userExpense.ExpenseDate, amount = userExpense.Amount, userId = userId });
+                    db.Execute("INSERT INTO dbo.Expenses (ExpenseDate, Title, Amount, UserId) VALUES (@expenseDate, @title, @amount, @userId)", new { expenseDate = userExpense.ExpenseDate, title = userExpense.Title,amount = userExpense.Amount, userId = userId });
                 }
 
                 return View();

@@ -13,7 +13,6 @@
             <a class="btn btn-primary" href="/logout">Logout</a>
         </div>
     </div>
-
 </div>
 
 <div class="container">
@@ -34,6 +33,14 @@
                     {
                         <div class="p-2 row justify-content-center">
                             <div class="p-3 rounded bg-primary col-lg-10">
+                                <label for="ExpenseDate">Title (Optional): </label>
+                                <input type="text" id="Title" name="Title" placeholder="Title (Optional)" />
+                                @Html.ValidationMessageFor(m => m.Title)
+                            </div>
+                        </div>
+                        
+                        <div class="p-2 row justify-content-center">
+                            <div class="p-3 rounded bg-primary col-lg-10">
                                 <label for="ExpenseDate">Expense Date: </label>
                                 <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" min="2018-01-01" max="@DateTime.UtcNow.ToString("yyyy-MM-dd")" id="ExpenseDate" name="ExpenseDate" />
                                 @Html.ValidationMessageFor(m => m.ExpenseDate)
@@ -43,7 +50,7 @@
                         <div class="p-2 row justify-content-center">
                             <div class="p-3 rounded bg-primary col-lg-10">
                                 <label for="Amount">Expense Amount:</label>
-                                <input size="5" maxlength="8" type="number" id="Amount" name="Amount" step=".01" />
+                                <input size="5" maxlength="8" type="number" id="Amount" name="Amount" step=".01" placholder="Amount" />
                                 @Html.ValidationMessageFor(m => m.Amount)
                             </div>
                         </div>
