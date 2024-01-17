@@ -32,17 +32,30 @@ namespace MVCBeginner.Controllers
                 return RedirectToAction("Login", "Login");
             }
 
-            using(var db = ConnectionManager.GetConnection() )
+            if(expenseList.Count == 0)
             {
-
-                List<Expense> associatedExpenseList = db.Query<Expense>("SELECT * FROM dbo.Expenses WHERE UserId=@userId", new { userId = userId }).AsList();
-                if (associatedExpenseList != null)
+                using (var db = ConnectionManager.GetConnection())
                 {
-                    expenseList = associatedExpenseList;
-                    ViewBag.ExpenseList = associatedExpenseList;
-                }
+                    List<DateTime> validDates = db.Query<DateTime>("SELECT ExpenseDate from dbo.Expenses WHERE UserId=@userId ORDER BY ExpenseDate ASC", new { userId = userId }).AsList();
 
+                    validDates.ForEach((date) => { System.Diagnostics.Debug.WriteLine(date.ToString()); });
+
+                    List<Expense> associatedExpenseList = db.Query<Expense>("SELECT * FROM dbo.Expenses WHERE UserId=@userId ORDER BY ExpenseDate ASC", new { userId = userId }).AsList();
+                    if (associatedExpenseList != null)
+                    {
+                        expenseList = associatedExpenseList;
+                    }
+
+                }
             }
+
+            ViewBag.ExpenseList = expenseList;
+            // sortExpenseList(expenseList);
+
+
+            
+
+
 
             ViewData["userId"] = userId;
             return View();
@@ -59,6 +72,8 @@ namespace MVCBeginner.Controllers
                 ViewBag.ExpenseList = expenseList;
                 expenseList.Add(userExpense);
 
+                sortExpenseList(expenseList);
+
                 string? userId = HttpContext.Session.GetString("userid");
 
                 using ( var db = ConnectionManager.GetConnection())
@@ -66,7 +81,7 @@ namespace MVCBeginner.Controllers
                     db.Execute("INSERT INTO dbo.Expenses (ExpenseDate, Title, Amount, UserId) VALUES (@expenseDate, @title, @amount, @userId)", new { expenseDate = userExpense.ExpenseDate, title = userExpense.Title,amount = userExpense.Amount, userId = userId });
                 }
 
-                return View();
+                return RedirectToAction("Dashboard");
             }
             return View();
         }
@@ -108,6 +123,46 @@ namespace MVCBeginner.Controllers
             return RedirectToAction("Dashboard");
         }
 
+        [Route("/updateexpense", Name = "UpdateExpense")]
+        public IActionResult UpdateExpense(int updateIndex)
+        {
+            string? userId = HttpContext.Session.GetString("userid");
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+
+            Expense expenseToUpdate = expenseList.ElementAt(updateIndex);
+            DateTime newDate = DateTime.Parse(HttpContext.Request.Form["ExpenseDate"]);
+            String newTitle = HttpContext.Request.Form["Title"];
+            double newAmount = Double.Parse(HttpContext.Request.Form["Amount"]);
+
+            if(!expenseToUpdate.ExpenseDate.Equals(newDate))
+            {
+                expenseToUpdate.ExpenseDate = newDate;
+            }
+            if(expenseToUpdate.Title != null)
+            {
+                if (!expenseToUpdate.Title.Equals(newTitle))
+                {
+                    expenseToUpdate.Title = newTitle;
+                }
+            }
+            if(expenseToUpdate.Amount != newAmount )
+            {
+                expenseToUpdate.Amount = newAmount;
+            }
+
+            using (var db = ConnectionManager.GetConnection())
+            {
+                db.Execute("UPDATE dbo.Expenses SET Title=@title, ExpenseDate=@expenseDate, Amount=@amount WHERE Id=@postId", new { title = expenseToUpdate.Title, expenseDate = expenseToUpdate.ExpenseDate, amount = expenseToUpdate.Amount, postId = expenseToUpdate.Id });
+                sortExpenseList(expenseList);
+            }
+
+            return RedirectToAction("Dashboard");
+        }
+
         [Route("/privacy")]
         public IActionResult Privacy()
         {
@@ -129,7 +184,12 @@ namespace MVCBeginner.Controllers
             return View();
         }
 
-        
+        private void sortExpenseList(List<Expense> inputList)
+        {
+            // ?? is the if null set x = ...
+            // provides a convenient way to set possibly null DateTime variables to a default value, since in ExpenseDate it can be nullable (it shouldnt be though wait)
+            inputList.Sort((x, y) => DateTime.Compare(x.ExpenseDate, y.ExpenseDate));
+        }
 
     }
 }
